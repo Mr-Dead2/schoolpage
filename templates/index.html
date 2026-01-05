@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hockey: The Heart of Latvia</title>
+    <style>
+    :root {
+            --latvia-red: #9E3039;
+            --latvia-red-glow: #ff4d5a;
+            --ice-white: #e8f4f8;
+            --dark-bg: #0b0d12;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--ice-white);
+            overflow-x: hidden;
+        }
+
+        /* --- STICKY NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(11, 13, 18, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--latvia-red);
+            padding: 15px 0;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--ice-white);
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover { color: var(--latvia-red-glow); text-shadow: 0 0 10px var(--latvia-red); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4), var(--dark-bg)), url('https://images.unsplash.com/photo-1515703407324-5f753afd8be8?q=80&w=2000&auto=format&fit=crop'); 
+            background-size: cover;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 6rem;
+            margin: 0;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: 5px;
+            -webkit-text-stroke: 2px var(--ice-white); 
+            color: transparent; 
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* TYPING EFFECT */
+        .typing-container {
+            font-size: 1.5rem;
+            margin-top: 10px;
+            color: var(--latvia-red-glow);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: bold;
+            height: 30px; 
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: var(--ice-white);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+
+        /* --- FUN FACTS TICKER --- */
+        .ticker-wrap {
+            width: 100%;
+            background-color: var(--latvia-red);
+            overflow: hidden;
+            height: 40px;
+            display: flex;
+            align-items: center;
+        }
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: ticker 35s linear infinite;
+        }
+        .ticker-item {
+            display: inline-block;
+            padding: 0 2rem;
+            font-size: 1rem;
+            color: white;
+            font-weight: bold;
+        }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+        /* Pause ticker on hover for readability */
+        .ticker-wrap:hover .ticker { animation-play-state: paused; }
+
+        /* Scroll progress bar */
+        #scroll-progress {
+            position: fixed;
+            top: 64px; /* below nav */
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--latvia-red), var(--latvia-red-glow));
+            z-index: 1500;
+            border-bottom-right-radius: 4px;
+            border-top-right-radius: 4px;
+            transition: width 0.1s linear;
+            box-shadow: 0 2px 8px rgba(158,48,57,0.12);
+        }
+
+        /* Hero animated spotlight */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(800px 400px at 20% 20%, rgba(158,48,57,0.12), transparent 20%), radial-gradient(400px 200px at 80% 80%, rgba(255,255,255,0.04), transparent 30%);
+            pointer-events: none;
+            mix-blend-mode: screen;
+            animation: spotlight 12s ease-in-out infinite;
+        }
+
+        @keyframes spotlight {
+            0% { transform: translateY(0) scale(1); opacity: 0.95; }
+            50% { transform: translateY(-10px) scale(1.02); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 0.95; }
+        }
+
+        /* Subtle parallax of background */
+        .hero { background-position: center 30%; transition: background-position 8s ease; }
+        .hero:hover { background-position: center 25%; }
+
+        /* Card reveal + shimmer */
+        .glass-card { opacity: 0; transform: translateY(18px); transition: transform 0.7s cubic-bezier(.2,.9,.3,1), opacity 0.6s ease; }
+        .glass-card.visible { opacity: 1; transform: translateY(0); }
+
+        .glass-card::after {
+            content: '';
+            position: absolute;
+            left: -60%;
+            top: 0;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(120deg, rgba(255,255,255,0.02), rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            transform: skewX(-20deg);
+            transition: left 0.9s ease;
+            pointer-events: none;
+        }
+        .glass-card.visible::after { left: 120%; transition: left 1s ease; }
+
+        /* 3D tilt on hover */
+        .glass-card:hover { transform: translateY(-8px) rotateX(1deg) rotateY(-1deg); box-shadow: 0 22px 60px rgba(0,0,0,0.6); }
+
+        /* --- LAYOUT & SECTIONS --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 40px;
+            margin-top: 80px;
+            border-left: 5px solid var(--latvia-red);
+            padding-left: 20px;
+            background: linear-gradient(90deg, var(--glass-bg), transparent);
+        }
+
+        /* --- HISTORY TIMELINE STYLING --- */
+        .history-card {
+            position: relative;
+            background: linear-gradient(135deg, rgba(158, 48, 57, 0.15) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border-left: 5px solid var(--latvia-red);
+            padding-left: 20px;
+        }
+
+        .history-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .history-date {
+            color: var(--latvia-red-glow);
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .history-card p {
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .history-highlight {
+            background: rgba(158, 48, 57, 0.2);
+            border-left: 4px solid var(--latvia-red-glow);
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 4px;
+            font-style: italic;
+            color: #c0c6cc;
+        }
+
+        /* --- GLASSMORPHISM CARDS --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--latvia-red);
+        }
+
+        .glass-card h3 { color: var(--latvia-red-glow); margin-top: 0; }
+        .glass-card strong { color: white; }
+
+        /* --- GRID LAYOUTS --- */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+        }
+
+        /* --- SPECIAL LATVIA SECTION --- */
+        .feature-box {
+            background: linear-gradient(135deg, rgba(158, 48, 57, 0.1) 0%, rgba(0,0,0,0) 100%);
+            border-left: 4px solid var(--latvia-red);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .quote {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #ccc;
+            border-left: 3px solid #555;
+            padding-left: 15px;
+            margin: 20px 0;
+        }
+
+        /* --- LEGENDS & PLAYERS --- */
+        .legend-profile { 
+            text-align: center; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 12px; 
+            padding: 22px; 
+            border-radius: 16px; 
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03));
+            border: 1px solid rgba(255,255,255,0.03);
+            transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+            position: relative; 
+            overflow: hidden;
+        }
+        .legend-profile:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,0.55); border-color: rgba(158, 48, 57, 0.16); }
+        .legend-profile::before {
+            content: "Legend";
+            position: absolute; 
+            top: 12px; 
+            left: 12px; 
+            background: linear-gradient(90deg, var(--latvia-red), var(--latvia-red-glow));
+            color: #fff; 
+            font-weight: 700; 
+            padding: 6px 8px; 
+            border-radius: 8px; 
+            font-size: 0.75rem; 
+            letter-spacing: 0.6px;
+            box-shadow: 0 4px 12px rgba(158,48,57,0.25);
+        }
+        .legend-profile h3 { font-size: 1.3rem; color: var(--latvia-red-glow); margin: 6px 0 2px; }
+        .legend-profile p { color: #d0d6db; font-size: 0.95rem; line-height: 1.5; margin: 0; }
+        
+        .legend-card::after {
+            content: "✦ Click to view ✦";
+            display: block;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: var(--latvia-red-glow);
+            font-weight: 600;
+            letter-spacing: 1px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .legend-card:hover::after {
+            opacity: 1;
+            text-shadow: 0 0 10px var(--latvia-red);
+        }
+        .circle-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 12px; /* Switched from circular to rounded rectangle */
+            background-color: #333; 
+            margin: 0 auto 10px auto;
+            border: 4px solid rgba(158,48,57,0.75);
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 0 20px rgba(255,255,255,0.02);
+            transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+        }
+        .circle-img:hover { transform: translateY(-6px) scale(1.03); border-color: var(--latvia-red-glow); box-shadow: 0 16px 40px rgba(158, 48, 57, 0.22); }
+
+        /* Legend link wrapper */
+        .legend-link { display: inline-block; text-decoration: none; cursor: pointer; }
+        .legend-link:focus { outline: 2px solid var(--latvia-red-glow); outline-offset: 4px; border-radius: 8px; }
+
+        /* --- MODAL POPUP --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            background: var(--dark-bg);
+            margin: auto;
+            padding: 40px;
+            border: 2px solid var(--latvia-red);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            animation: slideIn 0.3s ease;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--latvia-red-glow);
+            cursor: pointer;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-modal:hover { color: white; }
+
+        .modal-content h3 {
+            color: var(--latvia-red-glow);
+            font-size: 2rem;
+            margin-top: 0;
+        }
+
+        .modal-content p {
+            color: #d0d6db;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        .legend-stats-modal {
+            background: rgba(158, 48, 57, 0.1);
+            border-left: 4px solid var(--latvia-red);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .legend-stats-modal p {
+            margin: 10px 0;
+            color: #c0c6cc;
+        }
+
+        .legend-stats-modal strong {
+            color: var(--latvia-red-glow);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* --- RINK DIAGRAM --- */
+        .rink-layout {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            color: black; 
+        }
+        .rink-layout img { max-width: 100%; height: auto; }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 50px;
+            border-top: 1px solid var(--glass-border);
+            color: #666;
+            font-size: 0.8rem;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .circle-img { width: 110px; height: 110px; }
+            .legend-profile { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="#home">Sākums</a></li>
+            <li><a href="#history">Vēsture</a></li>
+            <li><a href="#latvia">Identitāte</a></li>
+            <li><a href="#equipment">Aprīkojums</a></li> 
+            <li><a href="#rules">Noteikumi</a></li>
+            <li><a href="#legends">Leģendes</a></li>
+        </ul>
+    </nav>
+    <div id="scroll-progress" aria-hidden="true"></div>
+
+    <div class="hero" id="home">
+        <h1>Hokejs</h1>
+        <div class="typing-container">
+            <span class="text-type"></span><span class="cursor">&nbsp;</span>
+        </div>
+    </div>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker-item">SARAUJ LATVIJA! Hokejs ir Latvijas valsts sports.</div>
+            <div class="ticker-item">FAKTS: Latvija piedalās Pasaules čempionāta Augstākajā divīzijā kopš 1997. gada.</div>
+            <div class="ticker-item">REKORDS: 2023. gadā Latvija ieguva savu pirmo IIHF medaļu (Bronza).</div>
+            <div class="ticker-item">LEĢENDA: Helmuts Balderis bija pirmais latvietis, kurš guva vārtus NHL.</div>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <section id="history">
+            <h2>Ledus Laika Skala</h2>
+            <div class="grid-3">
+                <div class="glass-card history-card">
+                    <div class="history-date">1875</div>
+                    <h3>Modernā Hokeja Sākums</h3>
+                    <p>Pirmā organizētā iekštelpu spēle notika <strong>Monreālā, Kanādā</strong> Viktorijas daiļslidošanas hallē. Noteikumus rakstīja Makgila universitātes studenti, izgulstot pamatu mūsdienu spēlei.</p>
+                    <div class="history-highlight">
+                        "Globālā sporta dzimšana, kas iedvesmotu tautas gadsimtiem ilgi."
+                    </div>
+                </div>
+                <div class="glass-card history-card">
+                    <div class="history-date">1931</div>
+                    <h3>Latvija Iestājas Pasaulē</h3>
+                    <p>Latvija bija agra sporta pieņemtāja, lai arī būdama maza nācija. Latvijas Ziemas Sporta Savienība pievienojās <strong>IIHF</strong> 1931. gadā, un nacionālā komanda debijēja 1932. gada Eiropas čempionātā.</p>
+                    <div class="history-highlight">
+                        "Maza nācija atstāj savu pēdu pasaules hokeja skatuvē."
+                    </div>
+                </div>
+                <div class="glass-card history-card">
+                    <div class="history-date">1950s-1960s</div>
+                    <h3>Padomju Ēras Sākums</h3>
+                    <p>Pēc Padomju okupācijas, latvieši sāka sacensties PSRS karoga vārdā. Neskatoties uz spēlēšanu citas valsts labā, latviešu talants spīdēja starptautiskajos konkursos.</p>
+                    <div class="history-highlight">
+                        "Latviešu prasme pārsniedza valstu robežas."
+                    </div>
+                </div>
+                <div class="glass-card history-card">
+                    <div class="history-date">1970s-1980s</div>
+                    <h3>Padomju Hokeja Zeltainā Ēra</h3>
+                    <p>Šajā periodā klubs <strong>Dinamo Riga</strong> kļuva leģendārs trenera Viktora Tihonova vadībā. Komanda uzvarēja vairākus Padomju līgas čempionātus un producēja leģendārus spēlētājus, piemēram, Helmutsu Balderiju.</p>
+                    <div class="history-highlight">
+                        "Dinamo Riga: Izcilības un nacionālās lepnuma simbols."
+                    </div>
+                </div>
+                <div class="glass-card history-card">
+                    <div class="history-date">1991-1996</div>
+                    <h3>Neatkarība un Cīņa Atpakaļ</h3>
+                    <p>Pēc tam, kad Latvija atguva neatkarību, nacionālai komandai bija jāsāk no nulles zemākajās divīzijās. 1996. gadā, perseverances un prasmes rezultātā, Latvija uzvarēja B grupas čempionātu un triumfāli atgriezās Elites divīzijā.</p>
+                    <div class="history-highlight">
+                        "No apakšas uz eliti: nolēmības atgriešanās stāsts."
+                    </div>
+                </div>
+                <div class="glass-card history-card">
+                    <div class="history-date">2006</div>
+                    <h3>Rīga Rīko Pasaules Čempionātu</h3>
+                    <p>Vēsturisks nākotnes etaps valstij. Latvija pirmo reizi rīkoja IIHF Pasaules čempionātu, iepazīstinot pasaules hokeja kopienu ar modernām arēnām un aizrautīgiem faniem. Renovētās arēnas un elektrificējošā atmosfēra pierādīja, ka Latvija ir hokeja superspēks.</p>
+                    <div class="history-highlight">
+                        "Pasaule nāca uz Latviju, un pasaulei tas patika."
+                    </div>
+                </div>
+                <div class="glass-card history-card">
+                    <div class="history-date">2010s-2020s</div>
+                    <h3>Vienmērīga Izcilība</h3>
+                    <p>Latvija izveidoja sevi par pastāvīgu jucekli starp starptautiskajiem hokeja konkurenciem. Regulāra piedalīšanās Pasaules čempionātos un Olimpisko spēļu parādīja tautas apņemšanos jauno talantu izstrādāšanai. Latvijas spēlētāji turpināja izcelt NHL.</p>
+                    <div class="history-highlight">
+                        "No reģionālas nozīmes uz globālu klātbūtni."
+                    </div>
+                </div>
+                <div class="glass-card history-card">
+                    <div class="history-date">2023</div>
+                    <h3>Bronzas Brīnums</h3>
+                    <p>Kopīgi rīkojot Pasaules čempionātu ar Somiju, Latvija sasniedza neiespējamo—savu pirmo kādreiz IIHF Pasaules čempionāta medaļu. Uzvarējot ASV 4-3 aizraujošā papildu laika izskaņā, tas atdūrās visu tautu asarās. Valdība nākamajā dienā pasludināja valsts brīvdienu.</p>
+                    <div class="history-highlight">
+                        "Tautas sapnis piepildīts: Bronza, lepnums un mūžīga slava."
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="latvia">
+            <h2>Vairāk Nekā Spēle</h2>
+            
+            <div class="grid-2">
+                <div class="glass-card">
+                    <h3>"Hokejs ir Latvijas Reliģija"</h3>
+                    <p>Pastāv sakāmvārds: <em>"Hokejs ir Latvijas reliģija."</em> Mazai tautai ar 1,8 miljoniem iedzīvotāju hokejs ir galvenais veids, kā parādīt spēku pasaules skatuvē.</p>
+                    <div class="feature-box">
+                        <strong>Dāvids Pret Goliātu</strong><br>
+                        Latvieši mīl "Underdogs" stāstus. Kad Latvija spēlē ar gigantiem, piemēram, Kanādu vai Krieviju, visa valsts apstājas, lai skatītos spēli. Uzvar lielu valsti ir masīva nacionālā lepnuma avots.
+                    </div>
+                    <p>Kad nacionālā komanda spēlē, tā apvienī valsti neatkarīgi no vecuma, fona vai politikas.</p>
+                </div>
+
+                <div class="glass-card">
+                    <h3>Sestais Spēlētājs</h3>
+                    <p>Latvijas fani ir oficiāli atzīti kā daži no labākajiem pasaulē. Viņus pazīst:</p>
+                    <ul style="line-height: 1.8;">
+                        <li>Ceļojums tūkstošiem uz ārzemju čempionātiem.</li>
+                        <li>Tautas dziesmu dziedāšana arēnas tribīnēs.</li>
+                        <li>Bungu un ragu spēlēšana bez pārtraukuma 60 minūtes.</li>
+                    </ul>
+                    <div class="quote">
+                        "Mēs ne tikai skatāmies hokeja. Mēs dzīvojam to. Fani ir septais spēlētājs uz ledus."
+                    </div>
+                    <div style="background: #333; height: 200px; border-radius: 10px; margin-top: 15px; display: flex; align-items: center; justify-content: center; color: #aaa; overflow: hidden;">
+                        <img src="https://stor2.leta.lv/phthumb/2023/20230512/%7B522585fe-bd04-4352-bf88-058ddac7bab5%7D.jpg" alt="Latvian hockey fans" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="equipment">
+            <h2>Aprīkojums un Tehnoloģija</h2>
+            <div class="grid-3">
+                <div class="glass-card">
+                    <div style="background: #333; height: 200px; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: #aaa; overflow: hidden;">
+                        <img src="https://images.unsplash.com/photo-1518611505868-5a9f7a51ccbb?q=80&w=400&auto=format&fit=crop" alt="Ripošlis" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h3>Ripošlis</h3>
+                    <p><strong>Materiāls:</strong> Vulkanizēts kaučuks</p>
+                    <p><strong>Svars:</strong> 156-170 grami</p>
+                    <p><strong>Diametrs:</strong> 76 mm</p>
+                    <p>Ripošlis ir hokeja spēles sirdis. Tā sasaldē pirms spēlēm, lai novērstu atlekšanu ledus uz ledus. Ikviens ripošlis ir precīzi stingrinājies, un tas nokļūst ātrumā līdz 160 km/h vai vairāk, ko noteic spēlētāju nūjas. Ripošļi ir bīstami un profesionāļi spēlētāji bieži nēsā sejas aizsargus.</p>
+                </div>
+                <div class="glass-card">
+                    <div style="background: #333; height: 200px; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: #aaa; overflow: hidden;">
+                        <img src="https://images.unsplash.com/photo-1588287537317-aeb171a5743f?q=80&w=400&auto=format&fit=crop" alt="Nūja" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h3>Nūja</h3>
+                    <p><strong>Materiāls:</strong> Oglekļa šķiedra, Aramīds</p>
+                    <p><strong>Garums:</strong> 140-170 cm</p>
+                    <p><strong>Liekamība:</strong> 55-100 stieņi</p>
+                    <p>Modernas nūjas ir vienpavedienu oglekļa šķiedras kompozīti ar aramīda pastiprinājumiem. Viņas tiek liektas un salauž kā loka un bulta, lai palaist ripošli ar milzīgu spēku. Nūjas var maksāt no 100 līdz 300 eiro un ir svarīga investīcija serioziem spēlētājiem. Profesionāļi bieži mainījuši nūjas dažas reizes sezonā.</p>
+                </div>
+                <div class="glass-card">
+                    <div style="background: #333; height: 200px; border-radius: 10px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: #aaa; overflow: hidden;">
+                        <img src="https://images.unsplash.com/photo-1535099519904-401079863b39?q=80&w=400&auto=format&fit=crop" alt="Slidas" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <h3>Slidas</h3>
+                    <p><strong>Asmeņa Garums:</strong> 250-280 mm</p>
+                    <p><strong>Asmeņa Forma:</strong> "Rocker" formas loks</p>
+                    <p><strong>Materiāls:</strong> Tērauds ar alumīnija bāzi</p>
+                    <p>Hokeja slidas ir īpašas, ar "rocker" formas asmeņiem, kas ļauj ātriem pagriezieniem. Asmeņi jāasina regulāri, lai būtu divi žilbēti asi maliņi perfektas virsmas griešanai uz ledus. Spēlētāji bieži sava slidas asina pēc katras spēles. Profesionāļi maksā 200-400 eiro par augstās klases slidām.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="rules">
+            <h2>Noteikumi un Ledus Lauks</h2>
+            <p>Spēle ilgst 60 minūtes (trīs 20 minūšu periodi). Ja rezultāts ir neizšķirts, tiek spēlēts Pārskaite. Hokejs ir ātra un rūpīga spēle, kur vietas nav nedz fiziska spēka, nedz taktiskas apgāšanas.</p>
+            
+            <div class="glass-card rink-layout">
+                <h3>Cīņas Lauks</h3>
+                
+
+[Hokeja ledus lauka attēls ar zonu etiķetēm]
+
+                <p style="margin-top: 15px;">Ledus lauks ir sadalīts trīs galvenajās zonās: <strong>Aizsardzības Zonā</strong> (tuvu jūsu vārtiem), <strong>Neitrālā Zonā</strong> (vidū), un <strong>Uzbrukuma Zonā</strong> (pretinieka vārtiem tuvu). Lauka garums ir 61 metri, platums 26 metri. Divi sarkanie punkti norāda fejs-off pozīcijas.</p>
+            </div>
+
+             <div class="grid-2" style="margin-top: 20px;">
+                <div class="glass-card">
+                    <h3>⚠ Offside Noteikums</h3>
+                    <p>Ripošlim jāieiet uzbrukuma zonā vispirms. Ja spēlētājs šķērso zilo līniju pirms ripošļa, tiek signalizēts "offside" un spēle apstājas. Tas novērš "goal hanging" (spēlētāju pastāvīgu stāvēšanu pretinieka vārti tuvu).</p>
+                    <p style="color: #c0c6cc; font-size: 0.9rem; margin-top: 10px;"><em>Piezīme: Spēlētājs var stāvēt offsaides pozīcijā, ja viņš neatrodas tuvāk pretinieka vārtiem nekā ripošlis un aizsardzības spēlētājs.</em></p>
+                </div>
+                <div class="glass-card">
+                    <h3>⚠ Icing Noteikums</h3>
+                    <p>Jūs nevarat izsist ripošli no sava aizsardzības zonas pāri viduskrītnei līdz ledus lauka galam (icing). Tas apstājas spēli un rada fejs-off sava aizsardzības zonā. Izņēmums: Ja komanda atrodas zemākā skaitā (Power Play), tiem ir atļauts icing.</p>
+                    <p style="color: #c0c6cc; font-size: 0.9rem; margin-top: 10px;"><em>Mērķis: Novērst komandas no vienkāršas laika tērēšanas ar nepareiziem izplašinājumiem.</em></p>
+                </div>
+             </div>
+
+                 <div class="grid-3" style="margin-top: 20px;">
+                    <div class="glass-card">
+                        <h3>🏒 Sods un Penāļi</h3>
+                        <p><strong>Mazs Sods (2 min):</strong> Traucēšana, stumšana, niecīgs slakums. Spēlētājs sēž sods kafejnīcā.</p>
+                        <p><strong>Lielais Sods (4 min):</strong> Paaugstināti kontakts, spēles pārrāvums.</p>
+                        <p><strong>Mīksāvēšanas Sods (5+2):</strong> Smagas pārkāpšanas (sitieni stūrim, spiežu slakums).</p>
+                        <p><strong>Dziesmiņa Sods:</strong> Spēlētāju izmešana no spēles.</p>
+                    </div>
+                    <div class="glass-card">
+                        <h3>⚡ Paaugstinātā Spēle</h3>
+                        <p><strong>Power Play:</strong> Kad pretinieks sēž sodā, tava komanda spēlē ar vairāk spēlētāju (piemēram, 5 pret 4). Tas ir ideāls laiks gūt vārtus.</p>
+                        <p><strong>Shorthanded:</strong> Tas ir pretējais—tava komanda sēž sodā un ir mazāk spēlētāju. Defensive spēle ir svarīga.</p>
+                        <p>Lielā daļa hokeja spēles tiek izlemta Power Play periodā.</p>
+                    </div>
+                    <div class="glass-card">
+                        <h3>🎯 Vārti un Punkti</h3>
+                        <p>Kad ripošlis pilnībā tiek nosūtīts aiz vārtu līnijas, to skaitā kā <strong>vienu vārtu punktu</strong>. Spēlētājs, kurš sita vai atspēlē ripošli, saņem <strong>krāvēju punktu</strong>. Spēlētājs, kurš pēdējais skar ripošli pirms gūšanas, saņem <strong>asisti punktu</strong>.</p>
+                        <p>Rezultāts tiek nolēmts spēles beigās: Uzvarētāja komanda—tā, kurai vairāk vārtu.</p>
+                    </div>
+                 </div>
+
+                 <div class="glass-card" style="margin-top: 20px; background: rgba(158, 48, 57, 0.1);">
+                    <h3 style="color: var(--latvia-red-glow);">Hokeja Vēsturiskie Noteikumu Pārmaiņas</h3>
+                    <p>Hokeja noteikumi sāka vienkārši (1875. gads), bet laika gaitā pamatīgi pieaugošos. <strong>2004. gadā</strong>, pēc skaļas kritika par lēno spēli, tika veiktas variantas pārmaiņas:</p>
+                    <ul style="line-height: 1.8;">
+                        <li><strong>Četrpadsmit sodu spēlētāji:</strong> Sodu skaits tika ierobežots, lai paātrinātu spēli.</li>
+                        <li><strong>Papildu laiks (OT):</strong> 3 pret 3 tiek spēlēts nepilnus 5 minūtes vienas komandas vietā (pagaidām ATP tikai čempionātis).</li>
+                        <li><strong>Nošaušanas likums (Penalty Shot):</strong> Nozīmē, ka viena spēlētāja pret vārtsargu spēle apgalvē iegūt vārtus.</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #c0c6cc;"><em>Šīs pārmaiņas padara hokeja modernajā spēli atraktīvāku un videi draudzīgāku publiku interesi.</em></p>
+                </div>
+        </section>
+
+        <section id="legends">
+            <h2>Latvijas Leģendes</h2>
+            <div class="grid-3">
+                <div class="glass-card legend-profile legend-card" onclick="openModal('balderis')" style="cursor: pointer;">
+                    <img src="https://via.placeholder.com/150" alt="Balderis" class="circle-img"> 
+                    <h3>Helmuts Balderis</h3>
+                    <p>Lielākais latvietis hokeja uzbrucējs visu laiku. Viņš bija pazīstams ar savu neticamo slidošanas ātrumu un bija labākais vārtutājs Padomju ligā.</p>
+                </div>
+                <div class="glass-card legend-profile legend-card" onclick="openModal('irbe')" style="cursor: pointer;">
+                    <img src="https://via.placeholder.com/150" alt="Irbe" class="circle-img">
+                    <h3>Artūrs Irbe</h3>
+                    <p>Kultūras ikona. Viņš spēlēja ar veciem, pasliktiem aizsargierīcēm un bija varonis San Hosē Sharks un Carolina Hurricanes.</p>
+                </div>
+                <div class="glass-card legend-profile legend-card" onclick="openModal('ozolins')" style="cursor: pointer;">
+                    <img src="https://via.placeholder.com/150" alt="Ozolins" class="circle-img">
+                    <h3>Sandis Ozoliņš</h3>
+                    <p>Stenli kausa čempions (1996). Uzbrukuma aizsargnieks, kurš bija abi NHL komandu un Latvijas nacionālās komandas kapteinis.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>Izveidots Skolas Projektam | 2025</p>
+    </footer>
+
+    <!-- Modals -->
+    <div id="balderisModal" class="modal" onclick="closeModalOnOverlay(event, 'balderisModal')">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('balderis')">&times;</button>
+            <h3>Helmuts Balderis</h3>
+            <p>Helmuts Balderis tiek uzskatīts par lielāko latvietis hokeja spēlētāju visu laiku. Dzimis 1952. gadā Rīgā, viņš izcēlās Padomju ērā un kļuva Latvijas nacionālais varonis.</p>
+            
+            <div class="legend-stats-modal">
+                <p><strong>Pozīcija:</strong> Uzbrucējs</p>
+                <p><strong>Augstums:</strong> 1,80 m</p>
+                <p><strong>Spēlēšanas Ēra:</strong> 1970s - 1980s</p>
+                <p><strong>Karieras Vārti:</strong> 500+</p>
+            </div>
+
+            <h4 style="color: var(--latvia-red-glow);">Karieras Augstpunkti</h4>
+            <p>Balderis bija pirmais latvietis, kurš guva vārtus NHL, salaužot barjeras savai tautai. Viņš bija pazīstams ar savu neticamo slidošanas ātrumu, veiklību un hokeja intelektu. Viņa sniegums Padomju ligā padarīja viņu leģendu visā Austrumeiropā.</p>
+            
+            <p>Spēlējot galvenokārt par Dinamo Riga, Balderis vadīja savu komandu uz vairākiem Padomju līgas čempionātiem un bija atslēgas spēlētājs Padomju hokeja zeltainajā ērā. Viņš pārstāvēja Latviju daudzos starptautiskos konkursos un joprojām ir iedvesma jaunajiem latviešu hokeja spēlētājiem.</p>
+
+            <p>Viņa mantojums pārsniedz statistiku—viņš kļuva Latvijas izcilības un perseverances simbols okupācijas laikā, nopelnot viņam vietu latviešu tautas sirdīs.</p>
+        </div>
+    </div>
+
+    <div id="irbeModal" class="modal" onclick="closeModalOnOverlay(event, 'irbeModal')">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('irbe')">&times;</button>
+            <h3>Artūrs Irbe</h3>
+            <p>Artūrs Irbe ir leģendārs latvietis vārtsargs, kurš spēlēja NHL un kļuva kultūras ikona Latvijā. Pazīstams ar savu nekonvencionālo stilu un nolēmību, Irbe spēlēja ar veciem, pasliktiem pūfīšiem un kļuva varonis vairāku NHL komandu.</p>
+            
+            <div class="legend-stats-modal">
+                <p><strong>Pozīcija:</strong> Vārtsargs</p>
+                <p><strong>Dzimšanas Gads:</strong> 1967</p>
+                <p><strong>Komandas:</strong> San Jose Sharks, Carolina Hurricanes, Chicago Blackhawks, St. Louis Blues</p>
+                <p><strong>Karieras Glābšanas %:</strong> .900</p>
+            </div>
+
+            <h4 style="color: var(--latvia-red-glow);">Karieras Augstpunkti</h4>
+            <p>Irbe ceļojums uz NHL bija iespaidīgs. Viņš kļuva pirmais Padomju vārtsargs, kurš spēlēja Ziemeļamerikas ligā pēc Padomju Savienības sabrukuma. Viņa stūrtība un nekonvencionālais spēles stils padarīja viņu mīļu kolēģiem un faniem.</p>
+            
+            <p>Spēlējot San Hosē Sharks vidus 1990os, Irbe kļuva fanu favorīts ar viņa akrobātiskajiem glābumiem un bravūras stilu. Viņš arī spēlēja Carolina Hurricanes, kur turpināja pierādīt sevi kā spējīgu NHL spēlētāju, neskatoties uz izaicinājumiem pielāgoties Ziemeļamerikas hokejam.</p>
+
+            <p>Irbe pārstāv elastību un Austrumeiropas talanta triumfu NHL. Viņa mantojums ir ne tikai statistikā, bet arī kā viņš atvēra durvis latviešu spēlētājiem un parādīja, ka prasme un nolēmība var pārvarēt jebkuru šķērsli.</p>
+        </div>
+    </div>
+
+    <div id="ozolinsModal" class="modal" onclick="closeModalOnOverlay(event, 'ozolinsModal')">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal('ozolins')">&times;</button>
+            <h3>Sandis Ozoliņš</h3>
+            <p>Sandis Ozoliņš ir latvietis hokeja leģenda un Stenli kausa čempions. Uzbrukuma aizsargnieks ar izņēmīgām prasmēm, Ozoliņš bija abi NHL komandu un Latvijas nacionālās komandas kapteinis, kļūstot vienam no visvairāk apbalvotajiem spēlētājiem no Latvijas.</p>
+            
+            <div class="legend-stats-modal">
+                <p><strong>Pozīcija:</strong> Aizsargnieks</p>
+                <p><strong>Dzimšanas Gads:</strong> 1972</p>
+                <p><strong>Komandas:</strong> Colorado Avalanche, St. Louis Blues, Nashville Predators, New York Rangers</p>
+                <p><strong>Stenli Kauss:</strong> 1996 (ar Colorado Avalanche)</p>
+            </div>
+
+            <h4 style="color: var(--latvia-red-glow);">Karieras Augstpunkti</h4>
+            <p>Ozoliņš bija spēles mainošais aizsargnieks, kurš revolucionēja, kā uzbrukuma noskaņoti aizsargnieki spēlēja NHL. Viņa 1996. gada Stenli kausa uzvara ar Colorado Avalanche paliek vienam no svinīgākajiem brīžiem Latvijas hokeja vēsturē.</p>
+            
+            <p>Ar izņēmīgo slidošanas spēju, hokeja saprātu un uzbrukuma prasmes, Ozoliņš bija vairāk nekā tikai aizsargnieks—viņš bija spēļu producents, kurš varēja kontrolēt spēles. Viņš bija Colorado Avalanche kapteinis, parādot viņa vadības un komandas panākumu svarīgumu.</p>
+
+            <p>Papildus NHL sasniegumiem, Ozoliņš kalpoja kā Latvijas nacionālās komandas kapteinis, vadot savu valsti caur kritiskiem starptautiskajiem turnīriem. Viņa vadības un prasmes palīdzēja paaugstināt Latvijas stāvokli pasaules hokejā un iedvesmoja nākamās paaudzes jaunos latviešu spēlētājus.</p>
+
+            <p>Ozoliņa mantojums ir lauztas spēles spēlētāja, kurš paaugstināja latviešu hokeja stāvokli pasaules skatuvē un pierādīja, ka mazas tautas var producēt pasaules klases talantu, spējīgs uzvarēt sporta lielāko balvtu.</p>
+        </div>
+    </div>
+
+    <script>
+        const textElement = document.querySelector(".text-type");
+        const words = ["Latvijas Sirdsapkārt", "Sarauj Latvija!", "Aizjūtiba. Spēks. Lepnums."];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        const typeSpeed = 100; 
+        const deleteSpeed = 50; 
+        const pauseTime = 2000; 
+
+        function type() {
+            const currentWord = words[wordIndex];
+            if (isDeleting) {
+                textElement.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                textElement.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+            }
+            let currentSpeed = isDeleting ? deleteSpeed : typeSpeed;
+            if (!isDeleting && charIndex === currentWord.length) {
+                currentSpeed = pauseTime; 
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length; 
+                currentSpeed = 500; 
+            }
+            setTimeout(type, currentSpeed);
+        }
+        document.addEventListener('DOMContentLoaded', type);
+
+        // Modal functions
+        function openModal(legend) {
+            const modalId = legend + 'Modal';
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(legend) {
+            const modalId = legend + 'Modal';
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function closeModalOnOverlay(event, modalId) {
+            if (event.target.id === modalId) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                });
+            }
+        });
+
+        // Scroll progress bar
+        const progressBar = document.getElementById('scroll-progress');
+        function updateProgress() {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const pct = (scrollTop / scrollHeight) * 100;
+            if (progressBar) progressBar.style.width = pct + '%';
+        }
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        document.addEventListener('DOMContentLoaded', updateProgress);
+
+        // Reveal elements on scroll
+        const revealTargets = document.querySelectorAll('.glass-card, .history-card');
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.12 });
+        revealTargets.forEach(el => io.observe(el));
+    </script>
+
+</body>
+</html>
